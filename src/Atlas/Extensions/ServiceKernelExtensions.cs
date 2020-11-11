@@ -38,17 +38,12 @@ namespace Atlas
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="type">The type of the module.</param>
-		public static IModule LoadEntryType(this IServiceKernel @this, Type type)
+		public static Option<IModule> LoadEntryType(this IServiceKernel @this, Type type)
 		{
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(type, nameof(type));
 
-			if (MakeEntryModuleType(type).IsNone)
-			{
-				throw new ArgumentException($"Type does not conform to the constraints of {typeof(IEntryModule<>)}.", nameof(type));
-			}
-
-			return @this.LoadEntryTypeInternal(type);
+			return MakeEntryModuleType(type).Map(_ => @this.LoadEntryTypeInternal(type));
 		}
 
 		private static IModule LoadEntryTypeInternal(this IServiceKernel @this, Type type)
@@ -72,15 +67,7 @@ namespace Atlas
 			Guard.Null(types, nameof(types));
 
 			// ReSharper disable once PossibleMultipleEnumeration
-			foreach (var type in Guard.NullElement(types, nameof(types)))
-			{
-				if (MakeEntryModuleType(type).IsNone)
-				{
-					continue;
-				}
-
-				yield return @this.LoadEntryTypeInternal(type);
-			}
+			return Guard.NullElement(types, nameof(types)).WhereSelect(x => @this.LoadEntryType(x));
 		}
 	}
 }

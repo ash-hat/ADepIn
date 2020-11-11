@@ -194,7 +194,7 @@ namespace Atlas
 			return realized;
 		}
 
-	 	/// <summary>
+		/// <summary>
 	 	/// 	Simultaneously filters and projects a sequence of elements onto a new form.
 	 	/// 	<p>This is equivalent to a <see cref="Enumerable.Select{TSource, TResult}(IEnumerable{TSource}, Func{TSource, int, TResult})"/> call chained into a <see cref="Enumerable.Where{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>.</p>
 	 	/// </summary>
@@ -425,22 +425,6 @@ namespace Atlas
 			Guard.Null(mapper, nameof(mapper));
 
 			return MatchSome(out var value) ? Option.Some(mapper(value)) : Option.None<TMapped>();
-		}
-
-		/// <summary>
-		/// 	Returns <code>Some(<paramref name="mapper"/>(v, <paramref name="state"/>))</code> if <code>Some(v)</code>, otherwise returns <code>None</code>.
-		/// </summary>
-		/// <param name="state">The state to pass to <paramref name="mapper"/>, if it is invoked.</param>
-		/// <param name="mapper">The function to mutate <code>v</code> if <code>Some(v)</code>.</param>
-		/// <typeparam name="TState">The type to of the object to pass to the mapper.</typeparam>
-		/// <typeparam name="TMapped">The type to map the inner value to.</typeparam>
-		public Option<TMapped> Map<TState, TMapped>(TState state, Mapper<T, TState, TMapped> mapper)
-			where TState : notnull
-		{
-			Guard.Null(state, nameof(state));
-			Guard.Null(mapper, nameof(mapper));
-
-			return MatchSome(out var value) ? Option.Some(mapper(value, state)) : Option.None<TMapped>();
 		}
 
 		/// <summary>

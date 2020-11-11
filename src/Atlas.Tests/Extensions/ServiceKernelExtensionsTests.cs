@@ -24,7 +24,7 @@ namespace Atlas.Tests
 			var mockKernel = new Mock<IServiceKernel>();
 			var kernel = mockKernel.Object;
 
-			var module = kernel.LoadEntryType(typeof(MockModule));
+			var module = kernel.LoadEntryType(typeof(MockModule)).Unwrap();
 
 			var typedModule = Assert.IsType<MockModule>(module);
 			Assert.True(typedModule.Loaded);
@@ -38,7 +38,7 @@ namespace Atlas.Tests
 			var mockKernel = new Mock<IServiceKernel>();
 			var kernel = mockKernel.Object;
 
-			Assert.Throws<ArgumentException>(() => kernel.LoadEntryType(entryType));
+			Assert.Equal(Option.None<IModule>(), kernel.LoadEntryType(entryType));
 		}
 
 		[Theory]
@@ -49,7 +49,7 @@ namespace Atlas.Tests
 			var mockKernel = new Mock<IServiceKernel>();
 			var kernel = mockKernel.Object;
 
-			Assert.Throws<ArgumentException>(() => kernel.LoadEntryType(entryType));
+			Assert.Equal(Option.None<IModule>(), kernel.LoadEntryType(entryType));
 		}
 
 		[Fact]

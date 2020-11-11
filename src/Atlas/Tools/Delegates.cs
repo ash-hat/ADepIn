@@ -19,7 +19,7 @@ namespace Atlas
 	/// <typeparam name="TSource">The type of the value.</typeparam>
 	/// <typeparam name="TState">The type of the state to pass in.</typeparam>
 	/// <typeparam name="TMapped">The type to map the value to.</typeparam>
-	public delegate TMapped Mapper<in TSource, in TState, out TMapped>(TSource value, TState state)
+	public delegate TMapped Mapper<in TSource, in TState, out TMapped>(TState state, TSource value)
 		where TState : notnull;
 
 	/// <summary>

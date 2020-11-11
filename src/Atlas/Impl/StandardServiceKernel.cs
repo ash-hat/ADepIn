@@ -95,7 +95,7 @@ namespace Atlas.Impl
 			try
 			{
 				return _bindings.OptionGetValue(typeof(TService))
-					.Map(this, (x, @this) => ((IServiceBinding<TService>) x).Get(@this));
+					.Map(x => ((IServiceBinding<TService>) x).Get(this));
 			}
 			finally
 			{
