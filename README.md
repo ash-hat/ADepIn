@@ -3,8 +3,9 @@ A simple inversion of control container and small utilities used by it, made for
 
 ## Notable Features
 - Near-zero reflection
-  - A small amount is used for entry module loading, not needed if you are not loading external modules
-  - Absolutely no `System.Reflection.Emit`
+  - A small amount is used for entry module loading
+  - A miniscule amount is used for nullable parameter checking, and only once per type (independent of amount of checks)
+  - Absolutely no amount of `System.Reflection.Emit`
 - No `NullReferenceException`s
   - All generic reference types are non-nullable using the `notnull` generic constraint
   - All reference and generic parameters are null-checked without boxing
