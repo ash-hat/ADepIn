@@ -43,7 +43,11 @@ namespace Atlas
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(type, nameof(type));
 
-			return MakeEntryModuleType(type).Map(_ => @this.LoadEntryTypeInternal(type));
+			return MakeEntryModuleType(type)
+				.Map(@interface => @interface.IsAssignableFrom(type) 
+					? Option.Some(@this.LoadEntryTypeInternal(type))
+					: Option.None<IModule>())
+				.Flatten();
 		}
 
 		private static IModule LoadEntryTypeInternal(this IServiceKernel @this, Type type)
