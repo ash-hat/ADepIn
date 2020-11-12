@@ -9,16 +9,14 @@ namespace Atlas.Impl
 	/// </summary>
 	public class StandardServiceKernel : IServiceKernel
 	{
-		private readonly Dictionary<Type, object> _bindings;
-		private readonly Dictionary<Type, object> _observers;
-		private readonly Dictionary<Type, int> _currentlyGetting;
+		private readonly Dictionary<Type, object> _infos;
 
 		private Option<int> _maxRecursion;
 
 		/// <summary>
 		/// 	The maximum amount of times to recursively get a service. If a service is gotten more than this many times within the same call, an exception is thrown.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">The inner value of <paramref name="value" /> was less than <code>0</code>.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">The inner value of <paramref name="value" /> was less than 0.</exception>
 		public Option<int> MaxRecursion
 		{
 			get => _maxRecursion;
@@ -38,99 +36,78 @@ namespace Atlas.Impl
 		/// </summary>
 		public StandardServiceKernel()
 		{
-			_bindings = new Dictionary<Type, object>();
-			_observers = new Dictionary<Type, object>();
-			_currentlyGetting = new Dictionary<Type, int>();
+			_infos = new Dictionary<Type, object>();
 
 			_maxRecursion = Option.Some(1000);
 		}
 
-		private Func<TService> GetServiceHandle<TService>(IServiceBinding<TService> binding) where TService : notnull
-		{
-			return () =>
-			{
-				var typed = (IServiceBinding<TService>) binding;
-				var service = typed.Get(this);
-
-				if (Nullability<TService>.IsNull(service))
-				{
-					throw new InvalidOperationException($"{typed} returned a null service.");
-				}
-
-				return service;
-			};
-		}
-
-		/// <inheritdoc cref="IServiceBinder.Bind{TService}" />
-		public void Bind<TService>(IServiceBinding<TService> binding) where TService : notnull
+		/// <inheritdoc cref="IServiceBinder.Bind{TService, TContext}" />
+		public void Bind<TService, TContext>(IServiceBinding<TService, TContext> binding)
+			where TService : notnull
+			where TContext : notnull
 		{
 			Guard.Null(binding, nameof(binding));
 
-			_bindings.Add(typeof(TService), binding);
-
-			var info = (ObserverInfo<TService>) _observers.GetOrInsertWith(typeof(TService), () => new ObserverInfo<TService>());
-			var handle = GetServiceHandle(binding);
-			info.Handle.Replace(handle);
-
-			if (info.Observers.Take().MatchSome(out var observers))
+			TService Factory(IServiceKernel kernel, TContext context)
 			{
-				foreach (IServiceObserver<TService> observer in observers)
+				var service = binding.Get(kernel, context);
+
+				if (Nullability<TService>.IsNull(service))
 				{
-					observer.Notify(this, handle);
+					throw new InvalidOperationException($"{binding} returned a null implementation.");
 				}
+
+				return service;
 			}
+
+			_infos.Add(typeof(ServiceInfo<TService, TContext>), new ServiceInfo<TService, TContext>(Factory));
 		}
 
-		/// <inheritdoc cref="IServiceResolver.Get{TService}" />
-		public Option<TService> Get<TService>() where TService : notnull
+		/// <inheritdoc cref="IServiceResolver.Get{TService, TContext}" />
+		public Option<TService> Get<TService, TContext>(TContext context)
+			where TService : notnull
+			where TContext : notnull
 		{
-			if (_maxRecursion.MatchSome(out var maxRecursion) && _currentlyGetting.TryGetValue(typeof(TService), out var count) &&
-				count >= maxRecursion)
-			{
-				throw new InvalidOperationException($"Recursive path detected while getting {typeof(TService)}.");
-			}
+			Guard.Null(context, nameof(context));
 
-			_currentlyGetting[typeof(TService)] = _currentlyGetting.GetOrInsert(typeof(TService), 0) + 1;
+			return _infos.OptionGetValue(typeof(ServiceInfo<TService, TContext>))
+				.Map(x => (ServiceInfo<TService, TContext>) x)
+				.Map(info =>
+				{
+					if (_maxRecursion.Contains(info.ResolutionStackSize))
+					{
+						throw new InvalidOperationException($"Detected recursive resolution while resolving {typeof(TService)}.");
+					}
 
-			try
-			{
-				return _bindings.OptionGetValue(typeof(TService))
-					.Map(x => ((IServiceBinding<TService>) x).Get(this));
-			}
-			finally
-			{
-				--_currentlyGetting[typeof(TService)];
-			}
+					++info.ResolutionStackSize;
+
+					try
+					{
+						return info.Factory(this, context);
+					}
+					finally
+					{
+						--info.ResolutionStackSize;
+					}
+				});
 		}
 
-		/// <inheritdoc cref="IObservableServiceResolver.Observe{TService}" />
-		public void Observe<TService>(IServiceObserver<TService> observer) where TService : notnull
-		{
-			Guard.Null(observer, nameof(observer));
+        private class ServiceInfo<TService, TContext>
+			where TService : notnull
+			where TContext : notnull
+        {
+			public delegate TService FactoryHandler(IServiceKernel kernel, TContext context);
 
-			var info = (ObserverInfo<TService>) _observers.GetOrInsertWith(typeof(TService), () => new ObserverInfo<TService>());
-			if (info.Handle.MatchSome(out var handle))
-			{
-				observer.Notify(this, handle);
-			}
-			else
-			{
-				var observers = info.Observers.GetOrInsertWith(() => new HashSet<IServiceObserver<TService>>());
-				
-				observers.Add(observer);
-			}
-		}
+            public FactoryHandler Factory { get; }
 
-	 	private class ObserverInfo<TService> where TService : notnull
-	 	{
-			public Option<HashSet<IServiceObserver<TService>>> Observers;
-			public Option<Func<TService>> Handle;
+            public int ResolutionStackSize { get; set; }
 
-			public ObserverInfo()
+			public ServiceInfo(FactoryHandler factory)
 			{
-				Observers = Option.None<HashSet<IServiceObserver<TService>>>();
-				Handle = Option.None<Func<TService>>();
+				Factory = factory;
+
+				ResolutionStackSize = 0;
 			}
-	 	}
+        }
 	}
 }

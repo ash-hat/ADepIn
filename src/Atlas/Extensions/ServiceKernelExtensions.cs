@@ -44,9 +44,7 @@ namespace Atlas
 			Guard.Null(type, nameof(type));
 
 			return MakeEntryModuleType(type)
-				.Map(@interface => @interface.IsAssignableFrom(type) 
-					? Option.Some(@this.LoadEntryTypeInternal(type))
-					: Option.None<IModule>())
+				.Map(_ => Option.Some(@this.LoadEntryTypeInternal(type)))
 				.Flatten();
 		}
 

@@ -56,7 +56,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Gets a dictionary value <code>v</code>. If it does exist, returns <code>Some(v)</code>, otherwise <code>None</code>.
+		/// 	Gets a dictionary value. If it does exist, returns Some, otherwise None.
 		/// 	<p>This is the <see cref="Option{TValue}"/> compliant version of <see cref="Dictionary{TKey, TValue}.TryGetValue(TKey, out TValue)"/>.</p>
 		/// </summary>
 		/// <param name="this"></param>

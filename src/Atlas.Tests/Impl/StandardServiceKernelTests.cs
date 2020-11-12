@@ -79,10 +79,10 @@ namespace Atlas.Impl.Tests
 		[Fact]
 		public void Bind()
 		{
-			var mock = new Mock<IServiceBinding<int>>();
+			var mockBinding = new Mock<IServiceBinding<Unit, Unit>>();
+			var binding = mockBinding.Object;
 
 			var kernel = new StandardServiceKernel();
-			var binding = mock.Object;
 
 			kernel.Bind(binding);
 		}
@@ -90,16 +90,31 @@ namespace Atlas.Impl.Tests
 		[Fact]
 		public void Get()
 		{
-			var value = Guid.NewGuid();
-			var mock = new Mock<IServiceBinding<Guid>>();
-			mock.Setup(x => x.Get(It.IsAny<IServiceResolver>()))
-				.Returns(value);
-
+			var value = new object();
+			var context = new object();
 			var kernel = new StandardServiceKernel();
-			var binding = mock.Object;
-			kernel.Bind(binding);
+			var mockBinding = new Mock<IServiceBinding<object, object>>();
+			mockBinding.Setup(services => services.Get(kernel, context))
+				.Returns(value);
+			var binding = mockBinding.Object;
 
-			Assert.Equal(value, kernel.Get<Guid>().Unwrap());
+			kernel.Bind(binding);
+			var resolved = kernel.Get<object, object>(context);
+
+			Assert.Equal(Option.Some(value), resolved);
+		}
+
+		[Fact]
+		public void Get_NullImpl()
+		{
+			var kernel = new StandardServiceKernel();
+			var mockBinding = new Mock<IServiceBinding<object, Unit>>();
+			mockBinding.Setup(services => services.Get(kernel, default))
+				.Returns(null!);
+			var binding = mockBinding.Object;
+
+			kernel.Bind(binding);
+			Assert.Throws<InvalidOperationException>(() => kernel.Get<object, Unit>(default));
 		}
 
 		[Fact]
@@ -107,60 +122,41 @@ namespace Atlas.Impl.Tests
 		{
 			var kernel = new StandardServiceKernel();
 
-			Assert.Equal(Option.None<int>(), kernel.Get<int>());
+			Assert.Equal(Option.None<Unit>(), kernel.Get<Unit>());
 		}
 
 		[Fact]
 		public void Get_RecursiveOverflow()
 		{
-			var mock = new Mock<IServiceBinding<int>>();
-			mock.Setup(x => x.Get(It.IsAny<IServiceResolver>()))
-				.Returns((IServiceResolver services) => services.Get<int>().Unwrap());
-
 			var kernel = new StandardServiceKernel
 			{
 				MaxRecursion = Option.Some(0)
 			};
-			var binding = mock.Object;
+			var mockBinding = new Mock<IServiceBinding<Unit, Unit>>();
+			mockBinding.Setup(x => x.Get(kernel, default))
+				.Returns((IServiceResolver services, Unit _) => services.Get<Unit, Unit>(default).Unwrap());
+			var binding = mockBinding.Object;
 
 			kernel.Bind(binding);
 
-			Assert.Throws<InvalidOperationException>(() => kernel.Get<int>());
+			Assert.Throws<InvalidOperationException>(() => kernel.Get<Unit>());
 		}
 
 		[Fact]
-		public void Observe()
+		public void Get_Contextual()
 		{
-			var mock = new Mock<IServiceObserver<bool>>();
-			var called = false;
-			mock.Setup(x => x.Notify(It.IsAny<IObservableServiceResolver>(), It.IsAny<Func<bool>>()))
-				.Callback(() => called = true);
-
+			var context = new object();
+			var value = new object();
 			var kernel = new StandardServiceKernel();
-			var observer = mock.Object;
-			kernel.Observe(observer);
-			Assert.False(called);
+			var mockBinding = new Mock<IServiceBinding<object, object>>();
+			mockBinding.Setup(x => x.Get(kernel, context))
+				.Returns(value);
+			var binding = mockBinding.Object;
 
-			kernel.Bind<bool>().ToConstant(false);
+			kernel.Bind(binding);
+			var resolved = kernel.Get<object, object>(context).Unwrap();
 
-			Assert.True(called);
-		}
-
-		[Fact]
-		public void Observe_AlreadyBound()
-		{
-			var mock = new Mock<IServiceObserver<bool>>();
-			var called = false;
-			mock.Setup(x => x.Notify(It.IsAny<IObservableServiceResolver>(), It.IsAny<Func<bool>>()))
-				.Callback(() => called = true);
-
-			var kernel = new StandardServiceKernel();
-			var observer = mock.Object;
-			kernel.Bind<bool>().ToConstant(true);
-
-			kernel.Observe(observer);
-
-			Assert.True(called);
+			Assert.Equal(value, resolved);
 		}
 	}
 }

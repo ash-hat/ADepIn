@@ -6,10 +6,13 @@ namespace Atlas
 	public interface IServiceBinder
 	{
 		/// <summary>
-		/// 	Sets a binding for a service.
+		/// 	Assigns a binding to a service.
 		/// </summary>
 		/// <param name="binding">The binding for the service.</param>
 		/// <typeparam name="TService">The service to assign the binding to.</typeparam>
-		void Bind<TService>(IServiceBinding<TService> binding) where TService : notnull;
+		/// <typeparam name="TContext">The context the binding uses.</typeparam>
+		void Bind<TService, TContext>(IServiceBinding<TService, TContext> binding) 
+			where TService : notnull
+			where TContext : notnull;
 	}
 }

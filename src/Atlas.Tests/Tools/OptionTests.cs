@@ -23,6 +23,21 @@ namespace Atlas.Tests
 		}
 
 		[Fact]
+		public void As()
+		{
+			var str = string.Empty;
+			var strAs = str.As<string, object>();
+
+			Assert.True(strAs.MatchSome(out var strCasted));
+			Assert.Equal(str, strCasted);
+
+			var obj = new object();
+			var objAs = obj.As<object, int>();
+
+			Assert.True(objAs.IsNone);
+		}
+
+		[Fact]
 		public void Contains_Equatable()
 		{
 			var someContainsInner = _some.Contains(SOME_INNER);
@@ -104,6 +119,27 @@ namespace Atlas.Tests
 			Assert.Equal(_some, someSomeFlattened);
 			Assert.Equal(_none, someNoneFlattened);
 			Assert.Equal(_none, noneFlattened);
+		}
+
+		[Fact]
+		public void Take()
+		{
+			var some = _some;
+			var notSome = _notSome;
+			var none = _none;
+
+			var someTook = some.Take();
+			var notSomeTook = notSome.Take();
+			var noneTook = none.Take();
+
+			Assert.Equal(_some, someTook);
+			Assert.Equal(_none, some);
+
+			Assert.Equal(_notSome, notSomeTook);
+			Assert.Equal(_none, notSome);
+
+			Assert.Equal(none, noneTook);
+			Assert.Equal(_none, none);
 		}
 
 		[Fact]
@@ -344,6 +380,20 @@ namespace Atlas.Tests
 
 			Assert.Equal(_notSome, someMapped);
 			Assert.Equal(_none, noneMapped);
+		}
+
+		[Fact]
+		public void MapAs()
+		{
+			var str = string.Empty;
+			var some = Option.Some(str);
+			var none = Option.None<string>();
+
+			var someMapped = some.MapAs<object>();
+			var noneMapped = none.MapAs<object>();
+			
+			Assert.Equal(Option.Some<object>(str), someMapped);
+			Assert.True(noneMapped.IsNone);
 		}
 
 		[Fact]

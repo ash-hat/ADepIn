@@ -12,7 +12,7 @@ namespace Atlas
 	public static class Option
 	{
 		/// <summary>
-		/// 	Constructs a <code>Some</code>, which contains an inner value.
+		/// 	Constructs a Some, which contains an inner value.
 		/// </summary>
 		/// <param name="value">The inner value.</param>
 		/// <typeparam name="T">The type of the inner value (<paramref name="value"/>).</typeparam>
@@ -22,7 +22,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Constructs a <code>None</code>.
+		/// 	Constructs a None.
 		/// </summary>
 		/// <typeparam name="T">The type of the would-be inner value.</typeparam>
 		public static Option<T> None<T>()
@@ -36,6 +36,19 @@ namespace Atlas
 	/// </summary>
 	public static class OptionExtensions
 	{
+		/// <summary>
+		/// 	Returns Some(<typeparamref name="TCasted"/>) if <typeparamref name="T"/> can be casted to <typeparamref name="TCasted"/>, otherwise None.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T">The type of the inner value.</typeparam>
+		/// <typeparam name="TCasted">The type to cast to.</typeparam>
+		public static Option<TCasted> As<T, TCasted>(this T @this)
+		{
+			return @this is TCasted casted
+				? Option.Some(casted)
+				: Option.None<TCasted>();
+		}
+
 		/// <summary>
 		/// 	Combines the inner and outer options into a singular <see cref="Option{T}"/>.
 		/// </summary>
@@ -128,7 +141,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Sets self to <code>None</code> and returns the previous value of self.
+		/// 	Sets self to None and returns the previous value of self.
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T">The type of the inner value.</typeparam>
@@ -142,7 +155,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Sets self to <code>Some(<paramref name="value"/>)</code> and returns the previous value of self.
+		/// 	Sets self to Some(<paramref name="value"/>) and returns the previous value of self.
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="value">The new inner value.</param>
@@ -157,7 +170,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Sets self to <code>Some(<paramref name="value"/>)</code> if it was not <code>Some</code> already, and returns the inner value.
+		/// 	Sets self to Some(<paramref name="value"/>) if it was not Some already, and returns the inner value.
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="value">The inner value if one is not present.</param>
@@ -175,7 +188,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Sets self to <code>Some(<paramref name="value"/>())</code> if it was not <code>Some</code> already, and returns the inner value.
+		/// 	Sets self to Some(<paramref name="value"/>()) if it was not Some already, and returns the inner value.
 		/// 	<p>This is the lazily-evaluated variant of <seealso cref="GetOrInsert{T}"/>.</p>
 		/// </summary>
 		/// <param name="this"></param>
@@ -213,7 +226,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Projects a sequence of <see cref="Option{T}"/> into the inner values of the <code>Some</code>s in the sequence.
+		/// 	Projects a sequence of <see cref="Option{T}"/> into the inner values of the Somes in the sequence.
 		/// </summary>
 		/// <typeparam name="T">The type of the inner values.</typeparam>
 		public static IEnumerable<T> WhereSome<T>(this IEnumerable<Option<T>> @this)
@@ -236,7 +249,7 @@ namespace Atlas
 
 	/// <summary>
 	///		A discriminated (binary) union that represents an optional, non-nullable value.
-	/// 	<p>If no value is present, it is <code>None</code>, otherwise is it <code>Some</code>.</p>
+	/// 	<p>If no value is present, it is None, otherwise is it Some.</p>
 	/// 	<p>This is not a replacement for <see cref="Nullable{T}" /> and nullable reference types, designed to unify both.</p>
 	/// </summary>
 	/// <typeparam name="T">The type of the value contained.</typeparam>
@@ -264,20 +277,20 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>true</code> with <code>v</code> if <code>Some(v)</code>, otherwise returns <code>false</code>.
+		/// 	Returns <see langword="true"/> with <paramref name="value"/> if Some, otherwise returns <see langword="false"/>.
 		/// </summary>
-		/// <param name="value">The value, if the return value is <code>true</code>.</param>
+		/// <param name="value">The value, if the return value is <see langword="true"/>.</param>
 		public bool MatchSome([MaybeNullWhen(false)] out T value)
 		{
 			value = _value!;
-			return IsSome;
+			return _isSome;
 		}
 
 		/// <summary>
-		/// 	Returns <code>v</code> if <code>Some(v)</code>, otherwise throws an <see cref="InvalidOperationException"/> with the message provided by <paramref name="message"/>.
+		/// 	Returns the inner value if Some, otherwise throws an <see cref="InvalidOperationException"/> with the message provided by <paramref name="message"/>.
 		/// 	<p>Opposite of <seealso cref="ExpectNone"/>.</p>
 		/// </summary>
-		/// <param name="message">The message to throw if <code>None</code>.</param>
+		/// <param name="message">The message to throw if None.</param>
 		public T Expect(string message)
 		{
 			Guard.Null(message, nameof(message));
@@ -291,10 +304,10 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Throws an <see cref="InvalidOperationException"/> with the message provided by <paramref name="message"/> if <code>Some</code>, otherwise does nothing.
+		/// 	Throws an <see cref="InvalidOperationException"/> with the message provided by <paramref name="message"/> if Some, otherwise does nothing.
 		/// 	<p>Opposite of <seealso cref="Expect"/>.</p>
 		/// </summary>
-		/// <param name="message">The message to throw if <code>Some</code>.</param>
+		/// <param name="message">The message to throw if Some.</param>
 		public void ExpectNone(string message)
 		{
 			Guard.Null(message, nameof(message));
@@ -308,7 +321,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>v</code> if <code>Some(v)</code>, otherwise throws an <see cref="InvalidOperationException"/>.
+		/// 	Returns the inner value if Some, otherwise throws an <see cref="InvalidOperationException"/>.
 		/// 	Shortcut for <seealso cref="Expect"/>. Opposite of <seealso cref="UnwrapNone"/>.
 		/// </summary>
 		public T Unwrap()
@@ -317,7 +330,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	If <code>Some</code>, throws an <see cref="InvalidOperationException"/>
+		/// 	If Some, throws an <see cref="InvalidOperationException"/>
 		/// 	Shortcut for <seealso cref="ExpectNone"/>. Opposite of <seealso cref="Unwrap"/>.
 		/// </summary>
 		public void UnwrapNone()
@@ -326,16 +339,16 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>v</code> if <code>Some(v)</code>, otherwise returns <paramref name="default"/>.
+		/// 	Returns the inner value if Some, otherwise returns <paramref name="default"/>.
 		/// </summary>
-		/// <param name="default">The value to return if <code>None</code>.</param>
+		/// <param name="default">The value to return if None.</param>
 		public T UnwrapOr(T @default)
 		{
 			return MatchSome(out var value) ? value : @default;
 		}
 
 		/// <summary>
-		/// 	Returns <code>v</code> if <code>Some(v)</code>, otherwise returns the result of <paramref name="default"/>.
+		/// 	Returns the inner value if Some, otherwise returns the result of <paramref name="default"/>.
 		/// 	<p>This is the lazily-evaluated variant of <seealso cref="UnwrapOr(T)"/>.</p>
 		/// </summary>
 		/// <param name="default">The getter to invoke if an inner value is not present.</param>
@@ -347,39 +360,39 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns self if <code>Some</code>, otherwise <paramref name="other"/>.
+		/// 	Returns self if Some, otherwise <paramref name="other"/>.
 		/// 	<p>Opposite of <seealso cref="And"/>.</p>
 		/// </summary>
-		/// <param name="other">The option to return if <code>None</code>.</param>
+		/// <param name="other">The option to return if None.</param>
 		public Option<T> Or(Option<T> other)
 		{
 			return MatchSome(out var value) ? Option.Some(value) : other;
 		}
 
 		/// <summary>
-		/// 	Returns self if <code>Some</code>, otherwise <paramref name="other"/>.
+		/// 	Returns self if Some, otherwise <paramref name="other"/>.
 		/// 	<p>This is the lazily-evaluated variant of <seealso cref="Or(Option{T})"/>.</p>
 		/// </summary>
-		/// <param name="other">The getter to invoke if <code>None</code>.</param>
+		/// <param name="other">The getter to invoke if None.</param>
 		public Option<T> OrElse(Func<Option<T>> other)
 		{
 			return MatchSome(out var value) ? Option.Some(value) : other();
 		}
 
 		/// <summary>
-		/// 	Returns <paramref name="other"/> if <code>Some</code>, otherwise <code>None</code>.
+		/// 	Returns <paramref name="other"/> if Some, otherwise None.
 		/// 	Opposite of <seealso cref="Or"/>.
 		/// </summary>
-		/// <param name="other">The option to return if <code>Some</code>.</param>
+		/// <param name="other">The option to return if Some.</param>
 		public Option<T> And(Option<T> other)
 		{
 			return IsNone ? Option.None<T>() : other;
 		}
 
 		/// <summary>
-		/// 	Returns self or <paramref name="other"/> if only one is <code>Some</code>, otherwise returns <code>None</code>.
+		/// 	Returns self or <paramref name="other"/> if only one is Some, otherwise returns None.
 		/// </summary>
-		/// <param name="other">The option to return if it is <code>Some</code> and self is <code>None</code>.</param>
+		/// <param name="other">The option to return if it is Some and self is None.</param>
 		public Option<T> Xor(Option<T> other)
 		{
 			T value;
@@ -403,9 +416,9 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>Some(v)</code> if <code>Some(v)</code> and <code><paramref name="predicate"/>(v)</code>, otherwise returns <code>None</code>.
+		/// 	Returns Some if Some and <paramref name="predicate"/>(v), otherwise returns None.
 		/// </summary>
-		/// <param name="predicate">The function that determines if <code>Some(x)</code> remains <code>Some</code> (<see langword="true"/>) or turns into <code>None</code> (<see langword="false"/>).</param>
+		/// <param name="predicate">The function that determines if Some remains Some (<see langword="true"/>) or turns into None (<see langword="false"/>).</param>
 		public Option<T> Filter(Func<T, bool> predicate)
 		{
 			Guard.Null(predicate, nameof(predicate));
@@ -416,9 +429,9 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>Some(<paramref name="mapper"/>(v))</code> if <code>Some(v)</code>, otherwise returns <code>None</code>.
+		/// 	Returns Some(<paramref name="mapper"/>(v)) if Some, otherwise returns None.
 		/// </summary>
-		/// <param name="mapper">The function to mutate <code>v</code> if <code>Some(v)</code>.</param>
+		/// <param name="mapper">The function to mutate the inner value if Some.</param>
 		/// <typeparam name="TMapped">The type to map the inner value to.</typeparam>
 		public Option<TMapped> Map<TMapped>(Mapper<T, TMapped> mapper)
 		{
@@ -428,11 +441,20 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>Some(<paramref name="mapper"/>(v))</code> if <code>Some(v)</code>, otherwise returns <code>Some(<paramref name="default"/>)</code>.
+		/// 	Returns Some(<typeparamref name="TMapped"/>) if Some(<typeparamref name="T"/>) and <typeparamref name="TMapped"/> is assignable from <typeparamref name="T"/>, otherwise none.
+		/// </summary>
+		/// <typeparam name="TMapped">The type to cast to.</typeparam>
+		public Option<TMapped> MapAs<TMapped>()
+		{
+			return Map(x => x.As<T, TMapped>()).Flatten();
+		}
+
+		/// <summary>
+		/// 	Returns Some(<paramref name="mapper"/>(v)) if Some, otherwise returns Some(<paramref name="default"/>).
 		/// 	<p>Compound of <seealso cref="Map{TMapped}(Mapper{T, TMapped})"/> and <seealso cref="Or"/>.</p>
 		/// </summary>
-		/// <param name="default">The value to return if <code>None</code>.</param>
-		/// <param name="mapper">The function to mutate <code>v</code> if <code>Some(v)</code>.</param>
+		/// <param name="default">The value to return if None.</param>
+		/// <param name="mapper">The function to mutate the inner value if Some.</param>
 		/// <typeparam name="TMapped">The type to map the inner value to.</typeparam>
 		public TMapped MapOr<TMapped>(TMapped @default, Mapper<T, TMapped> mapper)
 		{
@@ -442,11 +464,11 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns <code>Some(<paramref name="mapper"/>(v))</code> if <code>Some(v)</code>, otherwise returns <code>Some(<paramref name="default"/>())</code>.
+		/// 	Returns Some(<paramref name="mapper"/>(v)) if Some, otherwise returns Some(<paramref name="default"/>()).
 		/// 	<p>This is the lazily-evaluated variant of <seealso cref="MapOr"/>.</p>
 		/// </summary>
-		/// <param name="default">The getter to invoke if <code>None</code>.</param>
-		/// <param name="mapper">The function to mutate <code>v</code> if <code>Some(v)</code>.</param>
+		/// <param name="default">The getter to invoke if None.</param>
+		/// <param name="mapper">The function to mutate the inner value if Some.</param>
 		/// <typeparam name="TMapped">The type to map the inner value to.</typeparam>
 		public TMapped MapOrElse<TMapped>(Func<TMapped> @default, Mapper<T, TMapped> mapper)
 		{
@@ -457,7 +479,7 @@ namespace Atlas
 		}
 
 		/// <summary>
-		/// 	Returns "Some(<code>value</code>)" if <code>Some</code>, otherwise (<code>None</code>) returns "None".
+		/// 	Returns "Some(v)" if Some, otherwise (None) returns "None".
 		/// </summary>
 		public override string ToString()
 		{

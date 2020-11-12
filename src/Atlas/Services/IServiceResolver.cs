@@ -6,9 +6,13 @@ namespace Atlas
 	public interface IServiceResolver
 	{
 		/// <summary>
-		/// 	Tries to get a service. Returns <code>Some</code> if a binding was found, and <code>None</code> if it wasn't.
+		/// 	Resolves a service using a context.
 		/// </summary>
-		/// <typeparam name="TService">The service to get.</typeparam>
-		Option<TService> Get<TService>() where TService : notnull;
+		/// <param name="context">The context to fetch the service with.</param>
+		/// <typeparam name="TService">The type of service to produce.</typeparam>
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>
+		Option<TService> Get<TService, TContext>(TContext context) 
+			where TService : notnull 
+			where TContext : notnull;
 	}
 }
