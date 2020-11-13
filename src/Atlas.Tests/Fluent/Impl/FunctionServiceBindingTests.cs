@@ -4,16 +4,16 @@ using Xunit;
 
 namespace Atlas.Fluent.Impl.Tests
 {
-	public class FunctionalServiceBindingTests
+	public class FunctionServiceBindingTests
 	{
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void Ctor()
 		{
-			new FunctionalServiceBinding<bool, Unit>((_0, _1) => true);
-			new FunctionalServiceBinding<bool, Unit>((IServiceResolver _) => true);
-			new FunctionalServiceBinding<bool, Unit>((Unit _) => true);
-			new FunctionalServiceBinding<bool, Unit>(() => true);
+			new FunctionServiceBinding<bool, Unit>((_0, _1) => true);
+			new FunctionServiceBinding<bool, Unit>((IServiceResolver _) => true);
+			new FunctionServiceBinding<bool, Unit>((Unit _) => true);
+			new FunctionServiceBinding<bool, Unit>(() => true);
 		}
 
 		[Fact]
@@ -22,7 +22,7 @@ namespace Atlas.Fluent.Impl.Tests
 			var bindingResolver = Option.None<IServiceResolver>();
 			var bindingContext = Option.None<object>();
 			var ret = new object();
-			var binding = new FunctionalServiceBinding<object, object>((services, context) =>
+			var binding = new FunctionServiceBinding<object, object>((services, context) =>
 			{
 				bindingResolver.Replace(services);
 				bindingContext.Replace(context);
@@ -45,7 +45,7 @@ namespace Atlas.Fluent.Impl.Tests
 		{
 			var bindingResolver = Option.None<IServiceResolver>();
 			var ret = new object();
-			var binding = new FunctionalServiceBinding<object, Unit>((IServiceResolver resolver) =>
+			var binding = new FunctionServiceBinding<object, Unit>((IServiceResolver resolver) =>
 			{
 				bindingResolver.Replace(resolver);
 				return ret;
@@ -65,7 +65,7 @@ namespace Atlas.Fluent.Impl.Tests
 		{
 			var bindingContext = Option.None<object>();
 			var ret = new object();
-			var binding = new FunctionalServiceBinding<object, object>((object context) =>
+			var binding = new FunctionServiceBinding<object, object>((object context) =>
 			{
 				bindingContext.Replace(context);
 				return ret;
@@ -85,7 +85,7 @@ namespace Atlas.Fluent.Impl.Tests
 		public void GetPure()
 		{
 			var ret = new object();
-			var binding = new FunctionalServiceBinding<object, Unit>(() => ret);
+			var binding = new FunctionServiceBinding<object, Unit>(() => ret);
 
 			var mockResolver = new Mock<IServiceResolver>();
 			var resolver = mockResolver.Object;

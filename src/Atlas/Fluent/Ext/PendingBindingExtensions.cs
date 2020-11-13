@@ -46,7 +46,7 @@ namespace Atlas.Fluent
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(method, nameof(method));
 
-			return @this.ToScoped(new FunctionalServiceBinding<TService, TContext>(method));
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace Atlas.Fluent
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(method, nameof(method));
 
-			return @this.ToScoped(new FunctionalServiceBinding<TService, TContext>(method));
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace Atlas.Fluent
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(method, nameof(method));
 
-			return @this.ToScoped(new FunctionalServiceBinding<TService, TContext>(method));
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Atlas.Fluent
 			Guard.Null(@this, nameof(@this));
 			Guard.Null(method, nameof(method));
 
-			return @this.ToScoped(new FunctionalServiceBinding<TService, TContext>(method));
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 	}
 }

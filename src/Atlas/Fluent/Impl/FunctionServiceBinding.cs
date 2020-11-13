@@ -5,19 +5,19 @@ namespace Atlas.Fluent.Impl
 	/// <summary>
 	/// 	A service binding which produces a service determined by a delegate.
 	/// </summary>
-	/// <typeparam name="TService">The type of service to produce\.</typeparam>
+	/// <typeparam name="TService">The type of service to produce.</typeparam>
 	/// <typeparam name="TContext">The type of context to consume.</typeparam>
-	public class FunctionalServiceBinding<TService, TContext> : IServiceBinding<TService, TContext>
+	public class FunctionServiceBinding<TService, TContext> : IServiceBinding<TService, TContext>
 		where TService : notnull
 		where TContext : notnull
 	{	
 		private readonly WholeBindingImpl<TService, TContext> _impl;
 
 		/// <summary>
-		/// 	Constructs an instance of <see cref="FunctionalServiceBinding{TService, TContext}"/>.
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
 		/// </summary>
 		/// <param name="impl">The full binding implementation to use when this binding is called.</param>
-		public FunctionalServiceBinding(WholeBindingImpl<TService, TContext> impl)
+		public FunctionServiceBinding(WholeBindingImpl<TService, TContext> impl)
 		{
 			Guard.Null(impl, nameof(impl));
 
@@ -25,10 +25,10 @@ namespace Atlas.Fluent.Impl
 		}
 
 		/// <summary>
-		/// 	Constructs an instance of <see cref="FunctionalServiceBinding{TService, TContext}"/>.
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
 		/// </summary>
 		/// <param name="impl">The recursive binding implementation to use when this binding is called.</param>
-		public FunctionalServiceBinding(RecursiveBindingImpl<TService> impl)
+		public FunctionServiceBinding(RecursiveBindingImpl<TService> impl)
 		{
 			Guard.Null(impl, nameof(impl));
 
@@ -41,10 +41,10 @@ namespace Atlas.Fluent.Impl
 		}
 
 		/// <summary>
-		/// 	Constructs an instance of <see cref="FunctionalServiceBinding{TService, TContext}"/>.
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
 		/// </summary>
 		/// <param name="impl">The contextual binding implementation to use when this binding is called.</param>
-		public FunctionalServiceBinding(ContextualBindingImpl<TService, TContext> impl)
+		public FunctionServiceBinding(ContextualBindingImpl<TService, TContext> impl)
 		{
 			Guard.Null(impl, nameof(impl));
 
@@ -57,10 +57,10 @@ namespace Atlas.Fluent.Impl
 		}
 
 		/// <summary>
-		/// 	Constructs an instance of <see cref="FunctionalServiceBinding{TService, TContext}"/>.
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
 		/// </summary>
 		/// <param name="impl">The pure binding implementation to use when this binding is called.</param>
-		public FunctionalServiceBinding(PureBindingImpl<TService> impl)
+		public FunctionServiceBinding(PureBindingImpl<TService> impl)
 		{
 			Guard.Null(impl, nameof(impl));
 

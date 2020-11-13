@@ -21,7 +21,7 @@ namespace Atlas.Fluent.Impl.Tests
 			var mockResolver = new Mock<IServiceResolver>();
 			var resolver = mockResolver.Object;
 			var result = value;
-			var binding = new SingletonServiceBinding<bool, Unit>(new FunctionalServiceBinding<bool, Unit>(() =>
+			var binding = new SingletonServiceBinding<bool, Unit>(new FunctionServiceBinding<bool, Unit>(() =>
 			{
 				var copy = result;
 				result = !result;
