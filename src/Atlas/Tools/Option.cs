@@ -250,7 +250,7 @@ namespace Atlas
 	/// <summary>
 	///		A discriminated (binary) union that represents an optional, non-nullable value.
 	/// 	<p>If no value is present, it is None, otherwise is it Some.</p>
-	/// 	<p>This is not a replacement for <see cref="Nullable{T}" /> and nullable reference types, designed to unify both.</p>
+	/// 	<p>This is a replacement for <see cref="Nullable{T}" /> and nullable reference types, designed to unify both.</p>
 	/// </summary>
 	/// <typeparam name="T">The type of the value contained.</typeparam>
 	public readonly struct Option<T>

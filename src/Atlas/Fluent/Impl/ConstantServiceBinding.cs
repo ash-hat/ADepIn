@@ -23,9 +23,9 @@ namespace Atlas.Fluent.Impl
 		}
 
 		/// <inheritdoc cref="IServiceBinding{TService, TContext}.Get(IServiceResolver, TContext)"/>
-		public TService Get(IServiceResolver services, TContext context)
+		public Option<TService> Get(IServiceResolver services, TContext context)
 		{
-			return _value;
+			return Option.Some(_value);
 		}
 	}
 }

@@ -48,19 +48,7 @@ namespace Atlas.Impl
 		{
 			Guard.Null(binding, nameof(binding));
 
-			TService Factory(IServiceKernel kernel, TContext context)
-			{
-				var service = binding.Get(kernel, context);
-
-				if (Nullability<TService>.IsNull(service))
-				{
-					throw new InvalidOperationException($"{binding} returned a null implementation.");
-				}
-
-				return service;
-			}
-
-			_infos.Add(typeof(ServiceInfo<TService, TContext>), new ServiceInfo<TService, TContext>(Factory));
+			_infos.Add(typeof(ServiceInfo<TService, TContext>), new ServiceInfo<TService, TContext>(binding));
 		}
 
 		/// <inheritdoc cref="IServiceResolver.Get{TService, TContext}" />
@@ -83,28 +71,27 @@ namespace Atlas.Impl
 
 					try
 					{
-						return info.Factory(this, context);
+						return info.Binding.Get(this, context);
 					}
 					finally
 					{
 						--info.ResolutionStackSize;
 					}
-				});
+				})
+				.Flatten();
 		}
 
         private class ServiceInfo<TService, TContext>
 			where TService : notnull
 			where TContext : notnull
         {
-			public delegate TService FactoryHandler(IServiceKernel kernel, TContext context);
+            public readonly IServiceBinding<TService, TContext> Binding;
 
-            public FactoryHandler Factory { get; }
+            public int ResolutionStackSize;
 
-            public int ResolutionStackSize { get; set; }
-
-			public ServiceInfo(FactoryHandler factory)
+			public ServiceInfo(IServiceBinding<TService, TContext> binding)
 			{
-				Factory = factory;
+				Binding = binding;
 
 				ResolutionStackSize = 0;
 			}

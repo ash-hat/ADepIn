@@ -11,7 +11,7 @@ namespace Atlas.Fluent.Impl
 	{
 		private readonly IServiceBinding<TService, TContext> _binding;
 
-		private Option<TService> _value;
+		private Option<Option<TService>> _value;
 
 		/// <summary>
 		/// 	Constructs an instance of <see cref="SingletonServiceBinding{TService, TContext}"/>.
@@ -22,22 +22,22 @@ namespace Atlas.Fluent.Impl
 			Guard.Null(binding, nameof(binding));
 
 			_binding = binding;
-			_value = Option.None<TService>();
+			_value = Option.None<Option<TService>>();
 		}
 
 		/// <inheritdoc cref="IServiceBinding{TService, TContext}.Get(IServiceResolver, TContext)"/>
-		public TService Get(IServiceResolver services, TContext context)
+		public Option<TService> Get(IServiceResolver services, TContext context)
 		{
-			if (!_value.MatchSome(out var value))
+			return _value.UnwrapOrElse(() =>
 			{
 				Guard.Null(services, nameof(services));
 				Guard.Null(context, nameof(context));
 
-				value = _binding.Get(services, context);
+				var value = _binding.Get(services, context);
 				_value.Replace(value);
-			}
 
-			return value;
+				return value;
+			});
 		}
 	}
 }

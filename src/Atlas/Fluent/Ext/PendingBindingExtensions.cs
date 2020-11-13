@@ -99,5 +99,45 @@ namespace Atlas.Fluent
 
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
+
+		public static IPendingScopedBinding<TService, TContext> ToWholeNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, WholeNopBindingImpl<TService, TContext> method)
+			where TService : notnull
+			where TContext : notnull
+		{
+			Guard.Null(@this, nameof(@this));
+			Guard.Null(method, nameof(method));
+
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
+		}
+
+		public static IPendingScopedBinding<TService, TContext> ToRecursiveNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, RecursiveNopBindingImpl<TService> method)
+			where TService : notnull
+			where TContext : notnull
+		{
+			Guard.Null(@this, nameof(@this));
+			Guard.Null(method, nameof(method));
+
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
+		}
+
+		public static IPendingScopedBinding<TService, TContext> ToContextualNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, RecursiveNopBindingImpl<TService> method)
+			where TService : notnull
+			where TContext : notnull
+		{
+			Guard.Null(@this, nameof(@this));
+			Guard.Null(method, nameof(method));
+
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
+		}
+
+		public static IPendingScopedBinding<TService, TContext> ToPureNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, PureNopBindingImpl<TService> method)
+			where TService : notnull
+			where TContext : notnull
+		{
+			Guard.Null(@this, nameof(@this));
+			Guard.Null(method, nameof(method));
+
+			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
+		}
 	}
 }

@@ -21,7 +21,13 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = impl;
+			_impl = (services, context) =>
+			{
+				Guard.Null(services, nameof(services));
+				Guard.Null(context, nameof(context));
+
+				return impl(services, context);
+			};
 		}
 
 		/// <summary>
@@ -68,8 +74,53 @@ namespace Atlas.Fluent.Impl
 			_impl = (_0, _1) => impl();
 		}
 
+		public FunctionServiceBinding(WholeNopBindingImpl<TService, TContext> impl)
+		{
+			Guard.Null(impl, nameof(impl));
+
+			_impl = (services, context) => 
+			{
+				Guard.Null(services, nameof(services));
+				Guard.Null(context, nameof(context));
+
+				return Option.Some(impl(services, context));
+			};
+		}
+
+		public FunctionServiceBinding(RecursiveNopBindingImpl<TService> impl)
+		{
+			Guard.Null(impl, nameof(impl));
+
+			_impl = (services, _) => 
+			{
+				Guard.Null(services, nameof(services));
+
+				return Option.Some(impl(services));
+			};
+		}
+
+		public FunctionServiceBinding(ContextualNopBindingImpl<TService, TContext> impl)
+		{
+			Guard.Null(impl, nameof(impl));
+
+			_impl = (_, context) =>
+			{
+				Guard.Null(context, nameof(context));
+
+				return Option.Some(impl(context));
+			};
+		}
+
+		public FunctionServiceBinding(PureNopBindingImpl<TService> impl)
+		{
+			Guard.Null(impl, nameof(impl));
+
+			// For some reason, multiple lambda discards are only available in C# 9.0.
+			_impl = (_0, _1) => Option.Some(impl());
+		}
+
 		/// <inheritdoc cref="IServiceBinding{TService, TContext}.Get(IServiceResolver, TContext)"/>
-		public TService Get(IServiceResolver services, TContext context)
+		public Option<TService> Get(IServiceResolver services, TContext context)
 		{
 			return _impl(services, context);
 		}
