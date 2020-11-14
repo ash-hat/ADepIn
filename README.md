@@ -1,4 +1,4 @@
-# Atlas ![makefile workflow status](https://img.shields.io/github/workflow/status/ash-hat/Atlas/makefile?label=makefile&style=flat-square)
+# Atlas ![makefile workflow status](https://img.shields.io/github/workflow/status/ash-hat/Atlas/makefile/main?label=makefile&style=flat-square)
 A (relatively) simple inversion of control container and small utilities used by it, made to be used by frameworks and their modules.
 
 ## Contents
