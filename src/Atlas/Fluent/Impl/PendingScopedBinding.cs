@@ -11,7 +11,7 @@ namespace Atlas.Fluent.Impl
 		where TService : notnull
 		where TContext : notnull
 	{
-		/// <inheritdoc cref="IPendingBinding{TService, TContext}.Applicator"/>
+		/// <inheritdoc cref="IPendingScopedBinding{TService, TContext}.Applicator"/>
 		public PendingApplicator<TService, TContext> Applicator { get; }
 
 		/// <inheritdoc cref="IPendingScopedBinding{TService, TContext}.Binding"/>
