@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Atlas.Fluent.Tests
 {
-	public class PendingBindingExtensionsTests
+	public class ExtIBindingStubTests
 	{
 		[Fact]
 		public void ToConstant()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -23,7 +23,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToWholeMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -38,7 +38,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToRecursiveMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -53,7 +53,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToContextualMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -68,7 +68,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToPureMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -83,7 +83,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToWholeNopMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -98,7 +98,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToRecursiveNopMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -113,7 +113,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToContextualNopMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();
@@ -128,7 +128,7 @@ namespace Atlas.Fluent.Tests
 		[Fact]
 		public void ToPureNopMethod()
 		{
-			var mock = new Mock<IPendingBinding<object, Unit>>();
+			var mock = new Mock<IBindingStub<object, Unit>>();
 			mock.Setup(x => x.Applicator)
 				.Returns(Assert.NotNull)
 				.Verifiable();

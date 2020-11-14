@@ -3,7 +3,7 @@ namespace Atlas
     /// <summary>
     ///     A collection of extension methods for <see cref="IServiceResolver"/>.
     /// </summary>
-    public static class ServiceResolverExtensions
+    public static class ExtIServiceResolver
     {
 		/// <summary>
 		/// 	Resolves a service using no context (<see cref="Unit"/>).

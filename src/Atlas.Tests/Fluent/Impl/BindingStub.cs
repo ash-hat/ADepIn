@@ -5,20 +5,20 @@ using Xunit;
 
 namespace Atlas.Fluent.Impl.Tests
 {
-	public class PendingBindingTests
+	public class BindingStubTests
 	{
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void Ctor()
 		{
-			new PendingBinding<bool, Unit>(x => { });
+			new BindingStub<bool, Unit>(x => { });
 		}
 
 		[Fact]
 		public void Properties()
 		{
-			PendingApplicator<bool, Unit> applicator = x => { };
-			var pending = new PendingBinding<bool, Unit>(applicator);
+			StubApplicator<bool, Unit> applicator = x => { };
+			var pending = new BindingStub<bool, Unit>(applicator);
 
 			Assert.Equal(applicator, pending.Applicator);
 		}

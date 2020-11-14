@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Atlas.Fluent.Tests
 {
-	public class PendingScopedBindingExtensionsTests
+	public class ExtIScopedBindingStubTests
 	{
 		[Fact]
 		public void InSingletonNopScope()
 		{
 			var mockBinding = new Mock<IServiceBinding<object, Unit>>();
-			var mockPendingScopedBinding = new Mock<IPendingScopedBinding<object, Unit>>();
+			var mockPendingScopedBinding = new Mock<IScopedBindingStub<object, Unit>>();
 
 			mockBinding.Setup(x => x.Get(It.IsAny<IServiceResolver>(), It.IsAny<Unit>()))
 				.Throws<NotSupportedException>();
@@ -35,7 +35,7 @@ namespace Atlas.Fluent.Tests
 		public void InSingletonScope()
 		{
 			var mockBinding = new Mock<IServiceBinding<object, Unit>>();
-			var mockPendingScopedBinding = new Mock<IPendingScopedBinding<object, Unit>>();
+			var mockPendingScopedBinding = new Mock<IScopedBindingStub<object, Unit>>();
 
 			mockBinding.Setup(x => x.Get(It.IsAny<IServiceResolver>(), It.IsAny<Unit>()))
 				.Throws<NotSupportedException>();
@@ -59,7 +59,7 @@ namespace Atlas.Fluent.Tests
 		public void InTransientScope()
 		{
 			var mockBinding = new Mock<IServiceBinding<object, Unit>>();
-			var mockPendingScopedBinding = new Mock<IPendingScopedBinding<object, Unit>>();
+			var mockPendingScopedBinding = new Mock<IScopedBindingStub<object, Unit>>();
 
 			mockBinding.Setup(x => x.Get(It.IsAny<IServiceResolver>(), It.IsAny<Unit>()))
 				.Throws<NotSupportedException>();

@@ -9,7 +9,7 @@ namespace Atlas.Fluent
 	/// <typeparam name="TService">The service the binding produces.</typeparam>
 	/// <typeparam name="TContext">The context the binding consumes.</typeparam>
 	/// <returns></returns>
-	public delegate void PendingApplicator<TService, out TContext>(IServiceBinding<TService, TContext> binding)
+	public delegate void StubApplicator<TService, out TContext>(IServiceBinding<TService, TContext> binding)
 		where TService : notnull
 		where TContext : notnull;
 
@@ -18,13 +18,13 @@ namespace Atlas.Fluent
 	/// </summary>
 	/// <typeparam name="TService">The type of service to produce.</typeparam>
 	/// <typeparam name="TContext">The type of context to consume.</typeparam>
-	public interface IPendingBinding<TService, out TContext>
+	public interface IBindingStub<TService, out TContext>
 		where TService : notnull
 		where TContext : notnull
 	{
 		/// <summary>
 		/// 	The function to set the binding.
 		/// </summary>
-		PendingApplicator<TService, TContext> Applicator { get; }
+		StubApplicator<TService, TContext> Applicator { get; }
 	}
 }

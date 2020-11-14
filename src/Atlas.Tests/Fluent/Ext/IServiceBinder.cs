@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Atlas.Fluent.Tests
 {
-	public class ServiceBinderExtensionsTests
+	public class ExtIServiceBinderTests
 	{
 		[Fact]
 		public void Bind()

@@ -6,7 +6,7 @@ namespace Atlas
 	/// <summary>
 	/// 	A collection of extension methods for <see cref="IDictionary{TKey,TValue}"/>.
 	/// </summary>
-	public static class DictionaryExtensions
+	public static class ExtIDictionary
 	{
 		/// <summary>
 		/// 	If <paramref name="key"/> is not present in the dictionary, it is inserted with a value of <paramref name="default"/>.

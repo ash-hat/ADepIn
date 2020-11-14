@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Atlas.Fluent.Impl.Tests
 {
-	public class PendingScopedBindingTests
+	public class ScopedBindingStubTests
 	{
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
@@ -14,17 +14,17 @@ namespace Atlas.Fluent.Impl.Tests
 			var mockBinding = new Mock<IServiceBinding<bool, Unit>>();
 			var binding = mockBinding.Object;
 
-			new PendingScopedBinding<bool, Unit>(x => { }, binding);
+			new ScopedBindingStub<bool, Unit>(x => { }, binding);
 		}
 
 		[Fact]
 		public void Properties()
 		{
-			PendingApplicator<bool, Unit> applicator = x => { };
+			StubApplicator<bool, Unit> applicator = x => { };
 			var mockBinding = new Mock<IServiceBinding<bool, Unit>>();
 			var binding = mockBinding.Object;
 
-			var pending = new PendingScopedBinding<bool, Unit>(applicator, binding);
+			var pending = new ScopedBindingStub<bool, Unit>(applicator, binding);
 
 			Assert.Equal(applicator, pending.Applicator);
 			Assert.Equal(binding, pending.Binding);

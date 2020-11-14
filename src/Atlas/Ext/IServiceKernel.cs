@@ -7,7 +7,7 @@ namespace Atlas
 	/// <summary>
 	/// 	A collection of extension methods for <see cref="IServiceKernel"/>.
 	/// </summary>
-	public static class ServiceKernelExtensions
+	public static class ExtIServiceKernel
 	{
 		private static Option<Type> MakeEntryModuleType(Type @this)
 		{
