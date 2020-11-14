@@ -76,13 +76,13 @@ namespace Atlas.Impl
 				.Flatten();
 		}
 
-        private class ServiceInfo<TService, TContext>
+		private class ServiceInfo<TService, TContext>
 			where TService : notnull
 			where TContext : notnull
-        {
-            public readonly IServiceBinding<TService, TContext> Binding;
+		{
+			public readonly IServiceBinding<TService, TContext> Binding;
 
-            public int ResolutionStackSize;
+			public int ResolutionStackSize;
 
 			public ServiceInfo(IServiceBinding<TService, TContext> binding)
 			{
@@ -90,6 +90,6 @@ namespace Atlas.Impl
 
 				ResolutionStackSize = 0;
 			}
-        }
+		}
 	}
 }

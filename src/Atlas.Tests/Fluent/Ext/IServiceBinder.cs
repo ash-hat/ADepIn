@@ -17,14 +17,14 @@ namespace Atlas.Fluent.Tests
 		}
 
 		[Fact]
-        public void Bind_NoContext()
-        {
-            var mockBinder = new Mock<IServiceBinder>();
-            var binder = mockBinder.Object;
+		public void Bind_NoContext()
+		{
+			var mockBinder = new Mock<IServiceBinder>();
+			var binder = mockBinder.Object;
 
-            var pending = binder.Bind<Unit>();
+			var pending = binder.Bind<Unit>();
 
 			Assert.NotNull(pending);
-        }
+		}
 	}
 }
