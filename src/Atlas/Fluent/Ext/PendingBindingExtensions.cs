@@ -100,6 +100,13 @@ namespace Atlas.Fluent
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
+		/// <summary>
+		/// 	Binds a full, always Some, callback method to the service.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="method">The full binding implementation to use when this binding is called.</param>
+		/// <typeparam name="TService">The type of service to produce.</typeparam>
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>
 		public static IPendingScopedBinding<TService, TContext> ToWholeNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, WholeNopBindingImpl<TService, TContext> method)
 			where TService : notnull
 			where TContext : notnull
@@ -110,6 +117,13 @@ namespace Atlas.Fluent
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
+		/// <summary>
+		/// 	Binds a recursive, always Some, callback method to the service.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="method">The recursive binding implementation to use when this binding is called.</param>
+		/// <typeparam name="TService">The type of service to produce.</typeparam>
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>		
 		public static IPendingScopedBinding<TService, TContext> ToRecursiveNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, RecursiveNopBindingImpl<TService> method)
 			where TService : notnull
 			where TContext : notnull
@@ -120,6 +134,13 @@ namespace Atlas.Fluent
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
+		/// <summary>
+		/// 	Binds a contextual, always Some, callback method to the service.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="method">The contextual binding implementation to use when this binding is called.</param>
+		/// <typeparam name="TService">The type of service to produce.</typeparam>
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>
 		public static IPendingScopedBinding<TService, TContext> ToContextualNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, ContextualNopBindingImpl<TService, TContext> method)
 			where TService : notnull
 			where TContext : notnull
@@ -130,6 +151,13 @@ namespace Atlas.Fluent
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
+		/// <summary>
+		/// 	Binds a pure, always Some, callback method to the service.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="method">The pure binding implementation to use when this binding is called.</param>
+		/// <typeparam name="TService">The type of service to produce.</typeparam>
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>
 		public static IPendingScopedBinding<TService, TContext> ToPureNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, PureNopBindingImpl<TService> method)
 			where TService : notnull
 			where TContext : notnull

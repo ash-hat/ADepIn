@@ -74,6 +74,10 @@ namespace Atlas.Fluent.Impl
 			_impl = (_0, _1) => impl();
 		}
 
+		/// <summary>
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
+		/// </summary>
+		/// <param name="impl">The full, always Some, binding implementation to use when this binding is called.</param>
 		public FunctionServiceBinding(WholeNopBindingImpl<TService, TContext> impl)
 		{
 			Guard.Null(impl, nameof(impl));
@@ -87,6 +91,10 @@ namespace Atlas.Fluent.Impl
 			};
 		}
 
+		/// <summary>
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
+		/// </summary>
+		/// <param name="impl">The recursive, always Some, binding implementation to use when this binding is called.</param>
 		public FunctionServiceBinding(RecursiveNopBindingImpl<TService> impl)
 		{
 			Guard.Null(impl, nameof(impl));
@@ -99,6 +107,10 @@ namespace Atlas.Fluent.Impl
 			};
 		}
 
+		/// <summary>
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
+		/// </summary>
+		/// <param name="impl">The contextual, always Some, binding implementation to use when this binding is called.</param>
 		public FunctionServiceBinding(ContextualNopBindingImpl<TService, TContext> impl)
 		{
 			Guard.Null(impl, nameof(impl));
@@ -111,6 +123,10 @@ namespace Atlas.Fluent.Impl
 			};
 		}
 
+		/// <summary>
+		/// 	Constructs an instance of <see cref="FunctionServiceBinding{TService, TContext}"/>.
+		/// </summary>
+		/// <param name="impl">The pure, always Some, binding implementation to use when this binding is called.</param>
 		public FunctionServiceBinding(PureNopBindingImpl<TService> impl)
 		{
 			Guard.Null(impl, nameof(impl));
