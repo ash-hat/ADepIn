@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Fluent
 {
 	/// <summary>

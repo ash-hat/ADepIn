@@ -1,4 +1,3 @@
-using System;
 using Atlas.Fluent.Impl;
 
 namespace Atlas.Fluent

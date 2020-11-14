@@ -1,6 +1,4 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using Moq;
 using Xunit;
 
 namespace Atlas.Fluent.Impl.Tests
