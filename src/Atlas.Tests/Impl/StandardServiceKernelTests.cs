@@ -69,14 +69,6 @@ namespace Atlas.Impl.Tests
 		}
 
 		[Fact]
-		public void MaxRecursion_Setter_SomeNegative()
-		{
-			var kernel = new StandardServiceKernel();
-
-			Assert.Throws<ArgumentOutOfRangeException>(() => kernel.MaxRecursion = Option.Some(-1));
-		}
-
-		[Fact]
 		public void Bind()
 		{
 			var mockBinding = new Mock<IServiceBinding<Unit, Unit>>();

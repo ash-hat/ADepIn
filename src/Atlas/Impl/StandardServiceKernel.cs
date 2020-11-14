@@ -16,16 +16,12 @@ namespace Atlas.Impl
 		/// <summary>
 		/// 	The maximum amount of times to recursively get a service. If a service is gotten more than this many times within the same call, an exception is thrown.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">The inner value of <paramref name="value" /> was less than 0.</exception>
 		public Option<int> MaxRecursion
 		{
 			get => _maxRecursion;
 			set => _maxRecursion = value.Map(v =>
 			{
-				if (v < 0)
-				{
-					throw new ArgumentOutOfRangeException(nameof(value), v, "Value was less than 0.");
-				}
+				Guard.Negative(v, nameof(value));
 
 				return v;
 			});
