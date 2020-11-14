@@ -1,15 +1,19 @@
 namespace Atlas
 {
 	/// <summary>
-	/// 	Represents a factory for a service implementation that may use pre-existing services; a binding between the service and implementation.
+	/// 	Represents a service implementation.
 	/// </summary>
-	/// <typeparam name="TService">The service to get.</typeparam>
-	public interface IServiceBinding<out TService> where TService : notnull
+	/// <typeparam name="TService">The type of service to produce.</typeparam>
+	/// <typeparam name="TContext">The type of context to consume.</typeparam>
+	public interface IServiceBinding<TService, in TContext> 
+		where TService : notnull
+		where TContext : notnull
 	{
 		/// <summary>
-		/// 	Gets the service using the pre-existing services.
+		/// 	Gets the service this binding represents, given other services and contextual information.
 		/// </summary>
-		/// <param name="services">The services available to be used by this binding.</param>
-		TService Get(IServiceResolver services);
+		/// <param name="services">The services available in this service request.</param>
+		/// <param name="context">Information about the service request.</param>
+		Option<TService> Get(IServiceResolver services, TContext context);
 	}
 }
