@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+#if NETSTANDARD1_0
+using System.Reflection;
+#endif
 
 namespace Atlas
 {
@@ -26,7 +29,13 @@ namespace Atlas
 
 		static Nullability()
 		{
-			IsNullable = !typeof(T).IsValueType;
+			IsNullable = !
+#if !NETSTANDARD1_0
+				typeof(T)
+#else
+				typeof(T).GetTypeInfo()
+#endif
+				.IsValueType;
 			IsNull = IsNullable ? (NullCheck) NullableIsNull : NonNullableIsNull;
 		}
 

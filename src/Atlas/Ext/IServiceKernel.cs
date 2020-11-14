@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if NETSTANDARD1_0
+using System.Reflection;
+#endif
 
 namespace Atlas
 {
@@ -43,7 +46,19 @@ namespace Atlas
 			Guard.Null(type, nameof(type));
 
 			return MakeEntryModuleType(type)
-				.Map(x => x.IsAssignableFrom(type)
+				.Map(x =>
+#if !NETSTANDARD1_0
+						x
+#else
+						x.GetTypeInfo()
+#endif
+						.IsAssignableFrom(
+#if NETSTANDARD1_0
+							type.GetTypeInfo()
+#else
+							type
+#endif
+						)
 					? Option.Some(@this.LoadEntryTypeInternal(type))
 					: Option.None<IModule>())
 				.Flatten();
