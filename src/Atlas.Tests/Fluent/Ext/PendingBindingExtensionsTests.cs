@@ -79,5 +79,65 @@ namespace Atlas.Fluent.Tests
 			Assert.NotNull(pending);
 			mock.Verify();
 		}
+
+		[Fact]
+		public void ToWholeNopMethod()
+		{
+			var mock = new Mock<IPendingBinding<object, Unit>>();
+			mock.Setup(x => x.Applicator)
+				.Returns(Assert.NotNull)
+				.Verifiable();
+			var pendingBinding = mock.Object;
+
+			var pending = pendingBinding.ToWholeNopMethod((_0, _1) => throw new NotSupportedException());
+
+			Assert.NotNull(pending);
+			mock.Verify();
+		}
+
+		[Fact]
+		public void ToRecursiveNopMethod()
+		{
+			var mock = new Mock<IPendingBinding<object, Unit>>();
+			mock.Setup(x => x.Applicator)
+				.Returns(Assert.NotNull)
+				.Verifiable();
+			var pendingBinding = mock.Object;
+
+			var pending = pendingBinding.ToRecursiveNopMethod(_ => throw new NotSupportedException());
+
+			Assert.NotNull(pending);
+			mock.Verify();
+		}
+
+		[Fact]
+		public void ToContextualNopMethod()
+		{
+			var mock = new Mock<IPendingBinding<object, Unit>>();
+			mock.Setup(x => x.Applicator)
+				.Returns(Assert.NotNull)
+				.Verifiable();
+			var pendingBinding = mock.Object;
+
+			var pending = pendingBinding.ToContextualNopMethod(_ => throw new NotSupportedException());
+
+			Assert.NotNull(pending);
+			mock.Verify();
+		}
+
+		[Fact]
+		public void ToPureNopMethod()
+		{
+			var mock = new Mock<IPendingBinding<object, Unit>>();
+			mock.Setup(x => x.Applicator)
+				.Returns(Assert.NotNull)
+				.Verifiable();
+			var pendingBinding = mock.Object;
+
+			var pending = pendingBinding.ToPureNopMethod(() => throw new NotSupportedException());
+
+			Assert.NotNull(pending);
+			mock.Verify();
+		}
 	}
 }

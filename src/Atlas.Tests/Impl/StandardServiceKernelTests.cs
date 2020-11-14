@@ -90,7 +90,7 @@ namespace Atlas.Impl.Tests
 		[Fact]
 		public void Get()
 		{
-			var value = new object();
+			var value = Option.Some(new object());
 			var context = new object();
 			var kernel = new StandardServiceKernel();
 			var mockBinding = new Mock<IServiceBinding<object, object>>();
@@ -101,20 +101,7 @@ namespace Atlas.Impl.Tests
 			kernel.Bind(binding);
 			var resolved = kernel.Get<object, object>(context);
 
-			Assert.Equal(Option.Some(value), resolved);
-		}
-
-		[Fact]
-		public void Get_NullImpl()
-		{
-			var kernel = new StandardServiceKernel();
-			var mockBinding = new Mock<IServiceBinding<object, Unit>>();
-			mockBinding.Setup(services => services.Get(kernel, default))
-				.Returns(null!);
-			var binding = mockBinding.Object;
-
-			kernel.Bind(binding);
-			Assert.Throws<InvalidOperationException>(() => kernel.Get<object, Unit>(default));
+			Assert.Equal(value, resolved);
 		}
 
 		[Fact]
@@ -134,7 +121,7 @@ namespace Atlas.Impl.Tests
 			};
 			var mockBinding = new Mock<IServiceBinding<Unit, Unit>>();
 			mockBinding.Setup(x => x.Get(kernel, default))
-				.Returns((IServiceResolver services, Unit _) => services.Get<Unit, Unit>(default).Unwrap());
+				.Returns((IServiceResolver services, Unit _) => services.Get<Unit, Unit>(default));
 			var binding = mockBinding.Object;
 
 			kernel.Bind(binding);
@@ -146,7 +133,7 @@ namespace Atlas.Impl.Tests
 		public void Get_Contextual()
 		{
 			var context = new object();
-			var value = new object();
+			var value = Option.Some(new object());
 			var kernel = new StandardServiceKernel();
 			var mockBinding = new Mock<IServiceBinding<object, object>>();
 			mockBinding.Setup(x => x.Get(kernel, context))
@@ -154,7 +141,7 @@ namespace Atlas.Impl.Tests
 			var binding = mockBinding.Object;
 
 			kernel.Bind(binding);
-			var resolved = kernel.Get<object, object>(context).Unwrap();
+			var resolved = kernel.Get<object, object>(context);
 
 			Assert.Equal(value, resolved);
 		}

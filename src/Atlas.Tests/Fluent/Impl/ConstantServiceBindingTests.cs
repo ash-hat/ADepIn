@@ -16,14 +16,15 @@ namespace Atlas.Fluent.Impl.Tests
 		[Fact]
 		public void Get()
 		{
+			var mockResolver = new Mock<IServiceResolver>();
+
 			var value = new object();
 			var binding = new ConstantServiceBinding<object, Unit>(value);
-			var mockResolver = new Mock<IServiceResolver>();
 			var resolver = mockResolver.Object;
 
 			var ret = binding.Get(resolver, default);
 
-			Assert.Equal(value, ret);
+			Assert.Equal(Option.Some(value), ret);
 		}
 	}
 }

@@ -10,31 +10,30 @@ namespace Atlas.Fluent.Impl.Tests
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
 		public void Ctor()
 		{
-			new ConstantServiceBinding<bool, Unit>(true);
+			var mockBinding = new Mock<IServiceBinding<bool, Unit>>();
+			var binding = mockBinding.Object;
+
+			new SingletonServiceBinding<bool, Unit>(binding);
 		}
 
-		[Theory]
-		[InlineData(true)]
-		[InlineData(false)]
-		public void Get(bool value)
+		[Fact]
+		public void Get()
 		{
 			var mockResolver = new Mock<IServiceResolver>();
 			var resolver = mockResolver.Object;
-			var result = value;
-			var binding = new SingletonServiceBinding<bool, Unit>(new FunctionServiceBinding<bool, Unit>(() =>
-			{
-				var copy = result;
-				result = !result;
-				return copy;
-			}));
+			var binding = new SingletonServiceBinding<object, object>(new FunctionServiceBinding<object, object>(() => new object()));
+			
+			var in1 = new object();
+			var in2 = new object();
 
-			var ret1 = binding.Get(resolver, default);
-			var ret2 = binding.Get(resolver, default);
+			var ret1 = binding.Get(resolver, in1);
+			var ret2 = binding.Get(resolver, in2);
+			var ret3 = binding.Get(resolver, in1);
+			var ret4 = binding.Get(resolver, in2);
 
-			Assert.Equal(value, ret1);
-			Assert.Equal(value, ret2);
-			// Invert value because the function (which inverts result) is called once)
-			Assert.Equal(!value, result);
+			Assert.NotEqual(ret1, ret2);
+			Assert.Equal(ret1, ret3);
+			Assert.Equal(ret2, ret4);
 		}
 	}
 }
