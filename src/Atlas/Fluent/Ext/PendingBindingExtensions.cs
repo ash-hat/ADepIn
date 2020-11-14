@@ -73,7 +73,7 @@ namespace Atlas.Fluent
 		/// <param name="method">The recursive binding implementation to use when this binding is called.</param>
 		/// <typeparam name="TService">The type of service to produce.</typeparam>
 		/// <typeparam name="TContext">The type of context to consume.</typeparam>
-		public static IPendingScopedBinding<TService, TContext> ToContextualMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, RecursiveBindingImpl<TService> method)
+		public static IPendingScopedBinding<TService, TContext> ToContextualMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, ContextualBindingImpl<TService, TContext> method)
 			where TService : notnull
 			where TContext : notnull
 		{
@@ -120,7 +120,7 @@ namespace Atlas.Fluent
 			return @this.ToScoped(new FunctionServiceBinding<TService, TContext>(method));
 		}
 
-		public static IPendingScopedBinding<TService, TContext> ToContextualNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, RecursiveNopBindingImpl<TService> method)
+		public static IPendingScopedBinding<TService, TContext> ToContextualNopMethod<TService, TContext>(this IPendingBinding<TService, TContext> @this, ContextualNopBindingImpl<TService, TContext> method)
 			where TService : notnull
 			where TContext : notnull
 		{
