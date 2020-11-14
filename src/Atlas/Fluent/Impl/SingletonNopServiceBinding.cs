@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Atlas.Fluent.Impl
 {
 	/// <summary>
@@ -7,35 +5,36 @@ namespace Atlas.Fluent.Impl
 	/// </summary>
 	/// <typeparam name="TService">The type of service to produce.</typeparam>
 	/// <typeparam name="TContext">The type of context to consume.</typeparam>
-	public class SingletonServiceBinding<TService, TContext> : IServiceBinding<TService, TContext>
+	public class SingletonNopServiceBinding<TService, TContext> : IServiceBinding<TService, TContext>
 		where TService : notnull
 		where TContext : notnull
 	{
 		private readonly IServiceBinding<TService, TContext> _binding;
-		private readonly Dictionary<TContext, Option<TService>> _values;
+
+		private Option<Option<TService>> _value;
 
 		/// <summary>
 		/// 	Constructs an instance of <see cref="SingletonNopServiceBinding{TService, TContext}"/>.
 		/// </summary>
 		/// <param name="binding">The binding, without scope.</param>
-		public SingletonServiceBinding(IServiceBinding<TService, TContext> binding)
+		public SingletonNopServiceBinding(IServiceBinding<TService, TContext> binding)
 		{
 			Guard.Null(binding, nameof(binding));
 
 			_binding = binding;
-			_values = new Dictionary<TContext, Option<TService>>();
+			_value = Option.None<Option<TService>>();
 		}
 
 		/// <inheritdoc cref="IServiceBinding{TService, TContext}.Get(IServiceResolver, TContext)"/>
 		public Option<TService> Get(IServiceResolver services, TContext context)
 		{
-			return _values.OptionGetValue(context).UnwrapOrElse(() =>
+			return _value.UnwrapOrElse(() =>
 			{
 				Guard.Null(services, nameof(services));
 				Guard.Null(context, nameof(context));
 
 				var value = _binding.Get(services, context);
-				_values.Add(context, value);
+				_value.Replace(value);
 
 				return value;
 			});
