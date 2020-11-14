@@ -104,10 +104,10 @@ namespace Atlas
 			Null(value, name);
 
 			var isWhitespace =
-#if NET35
-				value!.Trim() == string.Empty
-#else
+#if !NET35
 				string.IsNullOrWhiteSpace(value!)
+#else
+				value!.Trim() == string.Empty
 #endif
 				;
 			if (isWhitespace)

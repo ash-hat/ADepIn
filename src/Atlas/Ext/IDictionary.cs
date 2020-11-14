@@ -64,10 +64,10 @@ namespace Atlas
 		/// <typeparam name="TKey">The type of the key of the dictionary.</typeparam>
 		/// <typeparam name="TValue">The type of the value of the dictionary.</typeparam>
 		public static Option<TValue> OptionGetValue<TKey, TValue>(this
-#if NET35
-			IDictionary
-#else
+#if !NET35
 			IReadOnlyDictionary
+#else
+			IDictionary
 #endif
 			<TKey, TValue> @this, TKey key) where TKey : notnull
 		{

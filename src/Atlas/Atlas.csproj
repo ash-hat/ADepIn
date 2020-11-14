@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net35;netstandard1.0;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
       
@@ -13,9 +13,9 @@
     <RepositoryUrl>https://github.com/ash-hat/Atlas.git</RepositoryUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" />
-    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
