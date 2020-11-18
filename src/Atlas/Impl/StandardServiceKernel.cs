@@ -57,7 +57,7 @@ namespace Atlas.Impl
 				.Map(x => (ServiceInfo<TService, TContext>) x)
 				.Map(info =>
 				{
-					if (_maxRecursion.Contains(info.ResolutionStackSize))
+					if (_maxRecursion.MatchSome(out var limit) && info.ResolutionStackSize > limit)
 					{
 						throw new InvalidOperationException($"Detected recursive resolution while resolving {typeof(TService)}.");
 					}
