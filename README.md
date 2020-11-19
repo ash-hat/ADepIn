@@ -1,5 +1,5 @@
 # ADepIn ![makefile workflow status](https://img.shields.io/github/workflow/status/ash-hat/ADepIn/makefile/main?label=makefile&style=flat-square)
-A (relatively) simple dependency injector and small utilities used by it, made to be used by frameworks and their modules.
+A dependency injector and small utilities used by it, made to be used by frameworks and their modules.
 
 ## Contents
 1. [Examples](#examples)  
