@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
       
     <Authors>ash-hat</Authors>
-    <Description>An dependency injector that uses no System.Reflection.Emit.</Description>
+    <Description>A dependency injector and small utilities used by it, made to be used by frameworks and their modules.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     
     <PackageProjectUrl>https://github.com/ash-hat/ADepIn</PackageProjectUrl>
