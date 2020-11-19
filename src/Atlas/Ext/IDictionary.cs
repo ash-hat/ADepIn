@@ -20,7 +20,6 @@ namespace Atlas
 		public static TValue GetOrInsert<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, TValue @default) where TKey : notnull
 		{
 			Guard.Null(@this, nameof(@this));
-			Guard.Null(key, nameof(key));
 
 			if (!@this.TryGetValue(key, out var value))
 			{
@@ -44,7 +43,6 @@ namespace Atlas
 		public static TValue GetOrInsertWith<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, Func<TValue> @default) where TKey : notnull
 		{
 			Guard.Null(@this, nameof(@this));
-			Guard.Null(key, nameof(key));
 
 			if (!@this.TryGetValue(key, out var value))
 			{
@@ -72,7 +70,6 @@ namespace Atlas
 			<TKey, TValue> @this, TKey key) where TKey : notnull
 		{
 			Guard.Null(@this, nameof(@this));
-			Guard.Null(key, nameof(key));
 
 #pragma warning disable 8600
 			return @this.TryGetValue(key, out TValue value)

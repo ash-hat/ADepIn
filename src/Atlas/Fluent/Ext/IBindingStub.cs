@@ -19,7 +19,6 @@ namespace Atlas.Fluent
 			where TContext : notnull
 		{
 			Guard.Null(@this, nameof(@this));
-			Guard.Null(constant, nameof(constant));
 
 			@this.Applicator(new ConstantServiceBinding<TService, TContext>(constant));
 		}
@@ -122,7 +121,7 @@ namespace Atlas.Fluent
 		/// <param name="this"></param>
 		/// <param name="method">The recursive binding implementation to use when this binding is called.</param>
 		/// <typeparam name="TService">The type of service to produce.</typeparam>
-		/// <typeparam name="TContext">The type of context to consume.</typeparam>		
+		/// <typeparam name="TContext">The type of context to consume.</typeparam>
 		public static IScopedBindingStub<TService, TContext> ToRecursiveNopMethod<TService, TContext>(this IBindingStub<TService, TContext> @this, RecursiveNopBindingImpl<TService> method)
 			where TService : notnull
 			where TContext : notnull

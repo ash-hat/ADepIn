@@ -8,7 +8,7 @@ namespace Atlas.Fluent.Impl
 	public class FunctionServiceBinding<TService, TContext> : IServiceBinding<TService, TContext>
 		where TService : notnull
 		where TContext : notnull
-	{	
+	{
 		private readonly WholeBindingImpl<TService, TContext> _impl;
 
 		/// <summary>
@@ -22,7 +22,6 @@ namespace Atlas.Fluent.Impl
 			_impl = (services, context) =>
 			{
 				Guard.Null(services, nameof(services));
-				Guard.Null(context, nameof(context));
 
 				return impl(services, context);
 			};
@@ -36,7 +35,7 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = (services, _) => 
+			_impl = (services, _) =>
 			{
 				Guard.Null(services, nameof(services));
 
@@ -52,12 +51,7 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = (_, context) =>
-			{
-				Guard.Null(context, nameof(context));
-
-				return impl(context);
-			};
+			_impl = (_, context) => impl(context);
 		}
 
 		/// <summary>
@@ -80,10 +74,9 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = (services, context) => 
+			_impl = (services, context) =>
 			{
 				Guard.Null(services, nameof(services));
-				Guard.Null(context, nameof(context));
 
 				return Option.Some(impl(services, context));
 			};
@@ -97,7 +90,7 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = (services, _) => 
+			_impl = (services, _) =>
 			{
 				Guard.Null(services, nameof(services));
 
@@ -113,12 +106,7 @@ namespace Atlas.Fluent.Impl
 		{
 			Guard.Null(impl, nameof(impl));
 
-			_impl = (_, context) =>
-			{
-				Guard.Null(context, nameof(context));
-
-				return Option.Some(impl(context));
-			};
+			_impl = (_, context) => Option.Some(impl(context));
 		}
 
 		/// <summary>

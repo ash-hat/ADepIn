@@ -5,7 +5,7 @@ namespace Atlas
 	/// </summary>
 	/// <typeparam name="TService">The type of service to produce.</typeparam>
 	/// <typeparam name="TContext">The type of context to consume.</typeparam>
-	public interface IServiceBinding<TService, in TContext> 
+	public interface IServiceBinding<TService, in TContext>
 		where TService : notnull
 		where TContext : notnull
 	{

@@ -21,11 +21,7 @@ namespace Atlas
 			Null(value, nameof(value));
 			Null(name, nameof(name));
 
-			return !Nullability<T>.IsNullable
-				// ReSharper disable once PossibleMultipleEnumeration
-				? value
-				// ReSharper disable once PossibleMultipleEnumeration
-				: NullElementInternal(value, name);
+			return NullElementInternal(value, name);
 		}
 
 		/// <summary>
@@ -78,7 +74,7 @@ namespace Atlas
 		/// <param name="value">The value of the parameter.</param>
 		/// <param name="name">The name of the parameter.</param>
 		[SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Global")]
-		public static void Null<T>(T value, string name)
+		public static void Null(object? value, string name)
 		{
 			// Do not replace this with a NullParameter call. It will be recursive. I did not accidentally do this.
 			if (name is null)
@@ -86,7 +82,7 @@ namespace Atlas
 				throw new ArgumentNullException(nameof(name));
 			}
 
-			if (Nullability<T>.IsNull(value))
+			if (value is null)
 			{
 				throw new ArgumentNullException(name);
 			}
@@ -206,7 +202,7 @@ namespace Atlas
 		{
 			foreach (T element in value)
 			{
-				if (Nullability<T>.IsNull(element))
+				if (element is null)
 				{
 					throw new ArgumentElementNullException(name);
 				}
@@ -217,16 +213,11 @@ namespace Atlas
 
 		private static void NullIndexInternal<T, TList>(TList value, string name, Func<TList, int> countGetter, Func<TList, int, T> indexer)
 		{
-			if (!Nullability<T>.IsNullable)
-			{
-				return;
-			}
-
 			var count = countGetter(value);
 			for (var i = 0; i < count; ++i)
 			{
 				var item = indexer(value, i);
-				if (Nullability<T>.IsNull(item))
+				if (item is null)
 				{
 					throw new ArgumentIndexNullException(name, i);
 				}

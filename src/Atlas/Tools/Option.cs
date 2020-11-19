@@ -65,8 +65,6 @@ namespace Atlas
 		/// <typeparam name="T">The type of the inner value.</typeparam>
 		public static bool Contains<T>(this Option<T> @this, T value) where T : IEquatable<T>
 		{
-			Guard.Null(value, nameof(value));
-
 			return @this.Contains(value, (a, b) => a.Equals(b));
 		}
 
@@ -79,7 +77,6 @@ namespace Atlas
 		/// <typeparam name="T">The type of the inner value.</typeparam>
 		public static bool Contains<T>(this Option<T> @this, T value, IEqualityComparer<T> comparer)
 		{
-			Guard.Null(value, nameof(value));
 			Guard.Null(comparer, nameof(comparer));
 
 			return @this.Contains(value, comparer.Equals);
@@ -94,7 +91,6 @@ namespace Atlas
 		/// <typeparam name="T">The type of the inner value.</typeparam>
 		public static bool Contains<T>(this Option<T> @this, T value, FunctionalEqualityComparer<T> comparer)
 		{
-			Guard.Null(value, nameof(value));
 			Guard.Null(comparer, nameof(comparer));
 
 			return @this.MatchSome(out var thisValue) && comparer(thisValue, value);

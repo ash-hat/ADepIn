@@ -17,8 +17,6 @@ namespace Atlas.Fluent.Impl
 		/// <param name="value">The constant value of the service.</param>
 		public ConstantServiceBinding(TService value)
 		{
-			Guard.Null(value, nameof(value));
-
 			_value = value;
 		}
 

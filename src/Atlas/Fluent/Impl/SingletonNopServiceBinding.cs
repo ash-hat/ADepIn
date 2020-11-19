@@ -31,7 +31,6 @@ namespace Atlas.Fluent.Impl
 			return _value.UnwrapOrElse(() =>
 			{
 				Guard.Null(services, nameof(services));
-				Guard.Null(context, nameof(context));
 
 				var value = _binding.Get(services, context);
 				_value.Replace(value);

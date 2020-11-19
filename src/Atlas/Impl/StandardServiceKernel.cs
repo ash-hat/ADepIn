@@ -51,8 +51,6 @@ namespace Atlas.Impl
 			where TService : notnull
 			where TContext : notnull
 		{
-			Guard.Null(context, nameof(context));
-
 			return _infos.OptionGetValue(typeof(ServiceInfo<TService, TContext>))
 				.Map(x => (ServiceInfo<TService, TContext>) x)
 				.Map(info =>

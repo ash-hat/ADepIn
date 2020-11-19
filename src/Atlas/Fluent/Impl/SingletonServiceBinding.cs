@@ -32,7 +32,6 @@ namespace Atlas.Fluent.Impl
 			return _values.OptionGetValue(context).UnwrapOrElse(() =>
 			{
 				Guard.Null(services, nameof(services));
-				Guard.Null(context, nameof(context));
 
 				var value = _binding.Get(services, context);
 				_values.Add(context, value);
