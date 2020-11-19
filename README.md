@@ -1,5 +1,5 @@
-# Atlas ![makefile workflow status](https://img.shields.io/github/workflow/status/ash-hat/Atlas/makefile/main?label=makefile&style=flat-square)
-A (relatively) simple inversion of control container and small utilities used by it, made to be used by frameworks and their modules.
+# ADepIn ![makefile workflow status](https://img.shields.io/github/workflow/status/ash-hat/ADepIn/makefile/main?label=makefile&style=flat-square)
+A (relatively) simple dependency injector and small utilities used by it, made to be used by frameworks and their modules.
 
 ## Contents
 1. [Examples](#examples)  
@@ -11,7 +11,7 @@ A (relatively) simple inversion of control container and small utilities used by
 ## Examples
 ### Getter calls
 ```cs
-using Atlas;
+using ADepIn;
 
 // Assign information to pass to the binding
 IMyContext context = ...;
@@ -40,9 +40,9 @@ if (implContextfulOpt.MatchSome(out IMyService implContextless))
 Fluent is the easy and recommended way to bind. In fact, it even makes the bindings for you!
 
 ```cs
-using Atlas;
-using Atlas.Impl; // for Atlas.Impl.StandardServiceKernel only
-using Atlas.Fluent;
+using ADepIn;
+using ADepIn.Impl; // for ADepIn.Impl.StandardServiceKernel only
+using ADepIn.Fluent;
 
 // Create something to hold bindings (service implementations)
 IServiceKernel kernel = new StandardServiceKernel();
@@ -62,8 +62,8 @@ kernel.Bind<IMyService>()
 Direct binding is simple, yet inflexible. This is how the library fundamentally works.
 
 ```cs
-using Atlas;
-using Atlas.Impl; // for Atlas.Impl.StandardServiceKernel only
+using ADepIn;
+using ADepIn.Impl; // for ADepIn.Impl.StandardServiceKernel only
 
 // Create something to hold bindings (service implementations)
 IServiceKernel kernel = new StandardServiceKernel();
@@ -83,16 +83,40 @@ Why use yet another dependency injection library?
 - Infrequent exceptions
   - Some `Argument...Exception`s, largely from non-nullable public APIs
   - A few `InvalidOperationException`s
-  - No `NullReferenceException`s, because of C# 8.0 `notnull` generic constraint, null guards, and `Option<T>`
+  - Rarely `NullReferenceException`s (see [Preventing NullReferenceExceptions](#preventing-nullreferenceexceptions))
 - Near-zero reflection
   - Some is used for entry module loading
-  - A little is used for nullable parameter checking, and is cached per type
-  - Absolutely no `System.Reflection.Emit` (SRE) - Atlas was made primarily for game modding, and some runtimes of Unity do not support SRE. Many existing solutions require or have obtuse opt-out SRE for its reflective performance, but it is out of scope for Atlas.
+  - Absolutely no `System.Reflection.Emit` (SRE)
 - Module system
   - `IModule` for modules that are manually constructed and loaded
   - `IEntryModule<TSelf>` for modules that are to be reflectively discovered and loaded
 - Publicly accessible utilities
-  - `Nullability<T>` has type nullability and can check if an instance is null (don't get nullability and then call the check, it does that for you)
   - `Guard` is an API helper class that asserts arguments
   - `Option<T>` is a discriminated union implementation of an [option type](https://en.wikipedia.org/wiki/Option_type), heavily based off of Rust's [`std::option`](https://doc.rust-lang.org/std/option/index.html)
   - `Unit` is an empty readonly struct implementation of a [unit type](https://wikipedia.org/wiki/Unit_type)
+
+### Preventing NullReferenceExceptions
+`NullReferenceExceptions` are few and far between within ADepIn because of C# 8.0's non-nullable reference types, null guards on reference types, and support for `Option<T>`. However, it has a weak spot in generics. Without a boxing call or possible reflection call in every null check, it is impossible to guarantee a generic type is not `null`. Therefore, if ADepIn receives a `null` value within a non-null generic parameter, ADepIn will not throw an `ArgumentNullException`.  
+For example:
+```cs
+using ADepIn;
+using ADepIn.Impl;
+using ADepIn.Fluent;
+
+IServiceKernel kernel = new StandardServiceKernel();
+
+kernel.Bind<IMyService>()
+  .ToConstant(null); // null is being passed as TValue (IMyService), no null check is performed
+
+...
+
+// Neither of these throw because the kernel has no problem finding the binding and the binding returns Some
+Option<IMyService> implOpt = kernel.Get<IMyService>();
+IMyService impl = implOpt.Unwrap();
+
+// Throws NullReferenceException
+impl.DoThing();
+```
+
+The first (and easiest) approach is to target `netcoreapp3.0` if your project permits it. Not to release the binaries, but to utilize the nullable static analysis.  
+The second way to combat this is to never use the `null` keyword. Get into the habit of using `Option<T>`, which explicitly states that there might not be a value. Be aware that code you call might return a `null` value still.
