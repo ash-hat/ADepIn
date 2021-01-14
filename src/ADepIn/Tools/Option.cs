@@ -36,16 +36,14 @@ namespace ADepIn
 	public static class OptionExtensions
 	{
 		/// <summary>
-		/// 	Returns Some(<typeparamref name="TCasted"/>) if <typeparamref name="T"/> can be casted to <typeparamref name="TCasted"/>, otherwise None.
+		/// 	Converts a nullable object to an <see cref="Option{T}"/>
 		/// </summary>
-		/// <param name="this"></param>
-		/// <typeparam name="T">The type of the inner value.</typeparam>
-		/// <typeparam name="TCasted">The type to cast to.</typeparam>
-		public static Option<TCasted> As<T, TCasted>(this T @this)
+		/// <typeparam name="T">The type of the possible inner value.</typeparam>
+		public static Option<T> Opt<T>(this T? @this) where T : class
 		{
-			return @this is TCasted casted
-				? Option.Some(casted)
-				: Option.None<TCasted>();
+			return @this is null
+				? Option.None<T>()
+				: Option.Some(@this);
 		}
 
 		/// <summary>
@@ -433,15 +431,6 @@ namespace ADepIn
 			Guard.Null(mapper, nameof(mapper));
 
 			return MatchSome(out var value) ? Option.Some(mapper(value)) : Option.None<TMapped>();
-		}
-
-		/// <summary>
-		/// 	Returns Some(<typeparamref name="TMapped"/>) if Some(<typeparamref name="T"/>) and <typeparamref name="TMapped"/> is assignable from <typeparamref name="T"/>, otherwise none.
-		/// </summary>
-		/// <typeparam name="TMapped">The type to cast to.</typeparam>
-		public Option<TMapped> MapAs<TMapped>()
-		{
-			return Map(x => x.As<T, TMapped>()).Flatten();
 		}
 
 		/// <summary>

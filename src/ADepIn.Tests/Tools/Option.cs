@@ -23,18 +23,13 @@ namespace ADepIn.Tests
 		}
 
 		[Fact]
-		public void As()
+		public void Opt()
 		{
-			var str = string.Empty;
-			var strAs = str.As<string, object>();
-
-			Assert.True(strAs.MatchSome(out var strCasted));
-			Assert.Equal(str, strCasted);
-
 			var obj = new object();
-			var objAs = obj.As<object, int>();
+			object? @null = null;
 
-			Assert.True(objAs.IsNone);
+			Assert.Equal(Option.Some(obj), obj.Opt());
+			Assert.Equal(Option.None<object>(), @null.Opt());
 		}
 
 		[Fact]
@@ -380,20 +375,6 @@ namespace ADepIn.Tests
 
 			Assert.Equal(_notSome, someMapped);
 			Assert.Equal(_none, noneMapped);
-		}
-
-		[Fact]
-		public void MapAs()
-		{
-			var str = string.Empty;
-			var some = Option.Some(str);
-			var none = Option.None<string>();
-
-			var someMapped = some.MapAs<object>();
-			var noneMapped = none.MapAs<object>();
-			
-			Assert.Equal(Option.Some<object>(str), someMapped);
-			Assert.True(noneMapped.IsNone);
 		}
 
 		[Fact]
