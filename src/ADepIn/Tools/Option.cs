@@ -422,6 +422,15 @@ namespace ADepIn
 		}
 
 		/// <summary>
+		///		Returns Some if the inner value can be cast to <typeparamref name="TCast"/>, otherwise returns None.
+		/// </summary>
+		/// <typeparam name="TCast">The type to attempt to cast the inner value to.</typeparam>
+		public Option<TCast> As<TCast>()
+		{
+			return MatchSome(out var value) && value is TCast cast ? Option.Some(cast) : Option.None<TCast>();
+		}
+
+		/// <summary>
 		/// 	Returns Some(<paramref name="mapper"/>(v)) if Some, otherwise returns None.
 		/// </summary>
 		/// <param name="mapper">The function to mutate the inner value if Some.</param>

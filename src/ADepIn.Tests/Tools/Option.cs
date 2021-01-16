@@ -364,6 +364,22 @@ namespace ADepIn.Tests
 		}
 
 		[Fact]
+		public void As()
+		{
+			const string content = "lots of content goes here";
+			var obj = Option.Some<object>(content);
+			var str = Option.Some(content);
+
+			var downcast = str.As<object>();
+			var upcast = obj.As<string>();
+			var invalid = obj.As<bool>();
+
+			Assert.Equal(str, upcast);
+			Assert.Equal(obj, downcast);
+			Assert.Equal(Option.None<bool>(), invalid);
+		}
+
+		[Fact]
 		public void Map()
 		{
 			var someMapped = _some.Map(x =>
